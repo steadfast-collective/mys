@@ -210,9 +210,11 @@ usage() {
     printf "    \e[33m-h, --help\e[39m                      Display the help screen\n"
     printf "    \e[33m--config\e[39m                        Generate a config file if one doesn't exist'\n"
     printf "    \e[33m--reset\e[39m                         Reset the mys config file and prompt for new details\n"
-    printf "    \e[33make [db_name]\e[39m                   Create a new database using the given parameter as the db name\n"
-    printf "    \e[33mdrop [db_name]\e[39m                   Drop a database using the given parameter as the target db\n"
-    printf "    \e[33mimport [sql_file] [db_name]\e[39m       Copy a .sql file, (1st paramater), into a the target db (2nd parameter)\n"
+    printf "    \e[33m--setup\e[39m                         Runs the first time setup\n"
+    printf "    \e[33mmake [db_name]\e[39m                  Create a new database using the given parameter as the db name\n"
+    printf "    \e[33mdrop [db_name]\e[39m                  Drop a database using the given parameter as the target db\n"
+    printf "    \e[33mimport [sql_file] [db_name]\e[39m     Copy a .sql file, (1st paramater), into a the target db (2nd parameter)\n"
+    printf "    \e[33mexport [db_name] [file_name]\e[39m    Export the chosen database into a file with the given name\n"
     exit 0
 }
 
