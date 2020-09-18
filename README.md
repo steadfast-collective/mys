@@ -21,7 +21,7 @@ $ mys <command> [parameter(s)]
 For more info, please run:
 
 ```sh
-$ mys -h | --help
+$ mys --help
 ```
 
 ## Contributors
