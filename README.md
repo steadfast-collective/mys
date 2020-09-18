@@ -1,6 +1,6 @@
 # mys
 
-A tiny cli tool to rapidly create, import and drop local MySQL databases.
+A tiny cli tool to rapidly create, drop, import & export local MySQL databases.
 
 ## Installation
 Copy and paste the following into your terminal:
