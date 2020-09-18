@@ -45,13 +45,19 @@ main() {
             cpdb ${args[1]} ${args[2]}
         ;;
         *)
-            printf -- "\e[91mSorry, mys doesn't recognise that command. (${args[0]})\n"
+            printf -- "\e[91mSorry, mys doesn't recognise the given command: (${args[0]})\n"
+            printf -- "\e[1;32mPlease run 'mys -h' for a list of commands\n"
         ;;
     esac
 }
 
 # functions
 initconfig() {
+    if ! configexists; then
+        printf -- "\e[91mNo config file found, lets make one!\n"
+        create_config
+    fi
+
     . ~/.config/mys.conf
 }
 
