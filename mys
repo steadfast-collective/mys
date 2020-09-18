@@ -3,7 +3,7 @@
 # -----
 # if this is your first time here, please run `mys -h` for more info.
 
-version=0.2.1
+version=0.2.2
 
 main() {
     CFG=~/.config/mys.conf
