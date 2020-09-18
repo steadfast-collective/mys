@@ -44,17 +44,21 @@ main() {
             resetconfig
             exit 0;
         ;;
-        "mkdb")
+        "make")
             printf -- "\e[1;32mCreating a fresh db with name: \e[42;90m ${args[1]} \e[0m\n"
-            mkdb ${args[1]}
+            makedb ${args[1]}
         ;;
-        "ddb")
+        "drop")
             printf -- "\e[1;32mDropping ${args[1]}\e[0m\n"
-            ddb ${args[1]}
+            drop ${args[1]}
         ;;
-        "cpdb")
+        "import")
             printf -- "\e[1;32mCopying ${args[1]} into ${args[2]}\e[0m\n"
-            cpdb ${args[1]} ${args[2]}
+            import ${args[1]} ${args[2]}
+        ;;
+        "export")
+            exportdb ${args[1]} ${args[2]}
+            printf -- "\e[1;32mExporting ${args[1]} into ${args[2]}\e[0m\n"
         ;;
         *)
             printf -- "\e[91mSorry, mys doesn't recognise the given command: (${args[0]})\n"
@@ -73,7 +77,7 @@ initconfig() {
     . ~/.config/mys.conf
 }
 
-mkdb() {
+makedb() {
     initconfig
 
     db=$1
@@ -87,7 +91,7 @@ mkdb() {
     fi
 }
 
-ddb() {
+drop() {
     initconfig
 
     db=$1
@@ -101,7 +105,7 @@ ddb() {
     fi
 }
 
-cpdb() {
+import() {
     initconfig
 
     file=$1
@@ -111,6 +115,27 @@ cpdb() {
 
     if [ $? -eq 0 ]; then
         printf -- "\e[32mSuccessfully copied ${file} into ${db}!\e[39m\n"
+    else
+        printf -- "\e[31mOops! Something wasn't right, please check the mys.log\e[39m"
+    fi
+}
+
+exportdb() {
+    initconfig
+
+    db=$1
+    dest=$2
+
+    if [ -z $dest ]; then
+        printf -- "\e[31mYou must provide a destination path when using 'mys export'\n"
+        printf -- "\e[31mRun 'mys --help' for more details\n"
+        exit 0;
+    fi
+
+    mysqldump --databases -u${MYS_NAME} --password=${MYS_PASS} ${db} > ${dest} 2> mys.log
+
+    if [ $? -eq 0 ]; then
+        printf -- "\e[32mSuccessfully exported ${db} into ${dest}!\e[39m\n"
     else
         printf -- "\e[31mOops! Something wasn't right, please check the mys.log\e[39m"
     fi
@@ -159,9 +184,9 @@ usage() {
     printf "    \e[33m-h, --help\e[39m                      Display the help screen\n"
     printf "    \e[33m--config\e[39m                        Generate a config file if one doesn't exist'\n"
     printf "    \e[33m--reset\e[39m                         Reset the mys config file and prompt for new details\n"
-    printf "    \e[33mkdb [db_name]\e[39m                   Create a new database using the given parameter as the db name\n"
-    printf "    \e[33mddb [db_name]\e[39m                   Drop a database using the given parameter as the target db\n"
-    printf "    \e[33mcpdb [sql_file] [db_name]\e[39m       Copy a .sql file, (1st paramater), into a the target db (2nd parameter)\n"
+    printf "    \e[33make [db_name]\e[39m                   Create a new database using the given parameter as the db name\n"
+    printf "    \e[33mdrop [db_name]\e[39m                   Drop a database using the given parameter as the target db\n"
+    printf "    \e[33mimport [sql_file] [db_name]\e[39m       Copy a .sql file, (1st paramater), into a the target db (2nd parameter)\n"
     exit 0
 }
 
