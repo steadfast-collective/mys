@@ -1,0 +1,91 @@
+#! /bin/bash
+# mys - A tiny cli tool to rapidly create, import and drop local MySQL databases.
+# -----
+# if this is your first time here, please run `mys -h` for more info.
+
+main() {
+    CFG=~/.config/mys.conf
+    args=("$@")
+    if [ $# -eq 0 ]
+    then
+        if configexists
+            then
+                printf '\e[1;32mPlease see -h (--help) for usage.\e[0m\n'
+                exit
+            else
+                create_config
+        fi
+    fi
+
+    case ${args[0]} in
+        -h | --help)
+            helpinfo
+            exit 0;
+        ;;
+        "reset")
+            resetconfig
+            exit 0;
+        ;;
+        "mkdb")
+            printf -- "\e[1;32mCreating a fresh db with name: \e[42;90m ${args[1]} \e[0m\n"
+            . ./commands/mys_mkdb ${args[1]}
+        ;;
+        "ddb")
+            printf -- "\e[1;32mDropping ${args[1]}\e[0m\n"
+            . ./commands/mys_ddb ${args[1]}
+        ;;
+        "cpdb")
+            printf -- "\e[1;32mCopying ${args[1]} into ${args[2]}\e[0m\n"
+            . ./commands/mys_cpdb ${args[1]} ${args[2]}
+        ;;
+        *)
+            printf -- "\e[91mSorry, mys doesn't recognise that command. (${args[0]})\n"
+        ;;
+    esac
+}
+
+# Check if a config file exists
+configexists() {
+    if [ ! -e ~/.config/mys.conf ]
+    then
+        return 1
+    fi
+    return 0
+}
+
+# Create configuration file
+create_config () {
+    printf -- "\e[34m⚡ Creating a mys.conf file ⚡\e[39m\n"
+
+    touch ~/.config/mys.conf
+    read -p 'MySQL username: ' mys_name
+    read -sp 'MySQL password: ' mys_pass
+
+    echo "MYS_NAME="$mys_name >> $CFG
+    echo "MYS_PASS="$mys_pass >> $CFG
+
+    . ~/.config/mys.conf
+    printf -- "\nConfig file successfully created at '~/.config/mys.conf'\n"
+}
+
+resetconfig() {
+    if configexists
+        then
+            rm -rf ~/.config/mys.conf
+            create_config
+    fi
+}
+
+helpinfo() {
+    printf "\e[34mmys_helper\e[39m\n"
+    printf "\e[34m[usage]\n\e[39m"
+    printf "    mys <command> [paramater]\n\n"
+    printf "\e[34m[commands]\n\e[39m"
+    printf -- "    \e[33m-h, --help\e[39m                     Display the help screen\n"
+    printf "    \e[33mkdb [db_name]\e[39m                  Create a new database using the given parameter as the db name\n"
+    printf "    \e[33mddb [db_name]\e[39m                   Drop a database using the given parameter as the target db\n"
+    printf "    \e[33mcpdb [sql_file] [db_name]\e[39m       Copy a .sql file, (1st paramater), into a the target db (2nd parameter)\n"
+    printf "    \e[33mreset\e[39m                           Reset the mys_helper config file and prompt for new details\n"
+}
+
+main "$@"; exit
