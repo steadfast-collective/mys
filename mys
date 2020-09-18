@@ -3,7 +3,7 @@
 # -----
 # if this is your first time here, please run `mys -h` for more info.
 
-version=0.1.3
+version=0.1.4
 
 main() {
     CFG=~/.config/mys.conf
@@ -28,7 +28,19 @@ main() {
             printf "mys $version \n"
             exit 0
         ;;
-        "reset")
+        --config)
+            if configexists
+                then
+                    printf -- "\e[34mThe mys config is located at $CFG\n"
+                    printf -- "\e[34mIf you wish to reset your config - please run 'mys --reset'\n"
+                    exit 0
+                else
+                    printf -- "\e[91mNo config file found, lets make one!\n"
+                    create_config
+            fi
+            exit 0
+        ;;
+        --reset)
             resetconfig
             exit 0;
         ;;
@@ -139,15 +151,17 @@ resetconfig() {
 }
 
 usage() {
-    printf "\e[34mmys_helper\e[39m\n"
+    printf "\e[34mmys\e[39m\n"
     printf "\e[34m[usage]\n\e[39m"
     printf "    mys <command> [paramater]\n\n"
     printf "\e[34m[commands]\n\e[39m"
-    printf -- "    \e[33m-h, --help\e[39m                     Display the help screen\n"
-    printf "    \e[33mkdb [db_name]\e[39m                  Create a new database using the given parameter as the db name\n"
+    printf "    \e[33m-v, --version\e[39m                   Display current version of mys\n"
+    printf "    \e[33m-h, --help\e[39m                      Display the help screen\n"
+    printf "    \e[33m--config\e[39m                        Generate a config file if one doesn't exist'\n"
+    printf "    \e[33m--reset\e[39m                         Reset the mys config file and prompt for new details\n"
+    printf "    \e[33mkdb [db_name]\e[39m                   Create a new database using the given parameter as the db name\n"
     printf "    \e[33mddb [db_name]\e[39m                   Drop a database using the given parameter as the target db\n"
     printf "    \e[33mcpdb [sql_file] [db_name]\e[39m       Copy a .sql file, (1st paramater), into a the target db (2nd parameter)\n"
-    printf "    \e[33mreset\e[39m                           Reset the mys_helper config file and prompt for new details\n"
     exit 0
 }
 
