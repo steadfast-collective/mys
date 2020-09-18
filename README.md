@@ -3,15 +3,14 @@
 A tiny cli tool to rapidly create, import and drop local MySQL databases.
 
 ## Installation
-close this repo into your desired location.
-add said location to your `$PATH`
+Clone this repo into your desired location.
+
+Add said location to your `$PATH`
 
 e.g Add the following to your `.zshrc / .bashrc`
 ```sh
 $ export PATH="$PATH:$HOME/path/to/this/repo"
 ```
-
-As if by magic, you can now call `mys` from anywhere!
 
 ## Usage
 ```sh
