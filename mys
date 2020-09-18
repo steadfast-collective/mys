@@ -28,6 +28,10 @@ main() {
             printf "mys $version \n"
             exit 0
         ;;
+        --setup)
+            setup
+            exit 0;
+        ;;
         --config)
             if configexists
                 then
@@ -142,6 +146,28 @@ exportdb() {
 }
 
 # endfunction
+
+
+setup() {
+    if [[ ":$PATH:" == *":$HOME/mys:"* ]]; then
+        printf -- "\e[32mIt looks like 'mys' is already in your path. Happy mys'ing!\e[39m\n"
+        exit 0;
+    fi
+
+    if [ -e ~/.zshrc ]; then
+        printf -- "\e[32mAdding mys to your PATH in ~/.zshrc\e[39m\n"
+        printf -- "\e[32mPlease restart your shell, or run 'source ~/.zshrc'\e[39m\n"
+        echo 'export PATH="$PATH:$HOME/mys"' >> ~/.zshrc
+    elif [ -e ~/.bash_profile ]; then
+        printf -- "\e[32mAdding mys to your PATH in ~/.bash_profile\e[39m\n"
+        echo 'export PATH="$PATH:$HOME/mys"' >> ~/.bash_profile
+    elif [ -e ~/.profile ]; then
+        printf -- "\e[32mAdding mys to your PATH in ~/.profile\e[39m\n"
+        echo 'export PATH="$PATH:$HOME/mys"' >> ~/.profile
+    fi
+
+    exit 0;
+}
 
 # Check if a config file exists
 configexists() {

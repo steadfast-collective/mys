@@ -3,13 +3,10 @@
 A tiny cli tool to rapidly create, import and drop local MySQL databases.
 
 ## Installation
-Clone this repo into your desired location.
+Copy and paste the following into your terminal:
 
-Add said location to your `$PATH`
-
-e.g Add the following to your `.zshrc / .bashrc`
 ```sh
-$ export PATH="$PATH:$HOME/path/to/this/repo"
+git clone https://github.com/steadfast-collective/mys.git ~/mys && cd ~/mys && ./mys --setup | bash
 ```
 
 ## Usage
