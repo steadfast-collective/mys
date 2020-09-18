@@ -1,4 +1,5 @@
 err.log
 out.log
+mys.log
 *.sql
 .DS_Store

@@ -3,7 +3,7 @@
 # -----
 # if this is your first time here, please run `mys -h` for more info.
 
-version=0.1.1
+version=0.1.2
 
 main() {
     CFG=~/.config/mys.conf
@@ -34,21 +34,71 @@ main() {
         ;;
         "mkdb")
             printf -- "\e[1;32mCreating a fresh db with name: \e[42;90m ${args[1]} \e[0m\n"
-            . ./commands/mys_mkdb ${args[1]}
+            mkdb ${args[1]}
         ;;
         "ddb")
             printf -- "\e[1;32mDropping ${args[1]}\e[0m\n"
-            . ./commands/mys_ddb ${args[1]}
+            ddb ${args[1]}
         ;;
         "cpdb")
             printf -- "\e[1;32mCopying ${args[1]} into ${args[2]}\e[0m\n"
-            . ./commands/mys_cpdb ${args[1]} ${args[2]}
+            cpdb ${args[1]} ${args[2]}
         ;;
         *)
             printf -- "\e[91mSorry, mys doesn't recognise that command. (${args[0]})\n"
         ;;
     esac
 }
+
+# functions
+initconfig() {
+    . ~/.config/mys.conf
+}
+
+mkdb() {
+    initconfig
+
+    db=$1
+
+    mysql -u ${MYS_NAME} --password=${MYS_PASS} -e "create database ${db};" > mys.log 2>&1
+
+    if [ $? -eq 0 ]; then
+        printf -- "\e[32mSuccessfully created ${db}!\e[39m\n"
+    else
+        printf -- "\e[31mOops! Something wasn't right, please check the mys.log\e[39m"
+    fi
+}
+
+ddb() {
+    initconfig
+
+    db=$1
+
+    mysql -u ${MYS_NAME} --password=${MYS_PASS} -e "drop database ${db};" > mys.log 2>&1
+
+    if [ $? -eq 0 ]; then
+        printf -- "\e[32mSuccessfully dropped ${db}!\e[39m\n"
+    else
+        printf -- "\e[31mOops! Something wasn't right, please check the mys.log\e[39m"
+    fi
+}
+
+cpdb() {
+    initconfig
+
+    file=$1
+    db=$2
+
+    mysql -u ${MYS_NAME} --password=${MYS_PASS} ${db} < ${file} > mys.log 2>&1
+
+    if [ $? -eq 0 ]; then
+        printf -- "\e[32mSuccessfully copied ${file} into ${db}!\e[39m\n"
+    else
+        printf -- "\e[31mOops! Something wasn't right, please check the mys.log\e[39m"
+    fi
+}
+
+# endfunction
 
 # Check if a config file exists
 configexists() {
