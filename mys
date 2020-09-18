@@ -3,6 +3,8 @@
 # -----
 # if this is your first time here, please run `mys -h` for more info.
 
+version=0.1.0
+
 main() {
     CFG=~/.config/mys.conf
     args=("$@")
@@ -11,7 +13,7 @@ main() {
         if configexists
             then
                 printf '\e[1;32mPlease see -h (--help) for usage.\e[0m\n'
-                exit
+                exit 0
             else
                 create_config
         fi
@@ -19,8 +21,12 @@ main() {
 
     case ${args[0]} in
         -h | --help)
-            helpinfo
-            exit 0;
+            usage
+            exit 0
+        ;;
+        -v | --version)
+            printf "mys $version \n"
+            exit 0
         ;;
         "reset")
             resetconfig
@@ -76,7 +82,7 @@ resetconfig() {
     fi
 }
 
-helpinfo() {
+usage() {
     printf "\e[34mmys_helper\e[39m\n"
     printf "\e[34m[usage]\n\e[39m"
     printf "    mys <command> [paramater]\n\n"
@@ -86,6 +92,7 @@ helpinfo() {
     printf "    \e[33mddb [db_name]\e[39m                   Drop a database using the given parameter as the target db\n"
     printf "    \e[33mcpdb [sql_file] [db_name]\e[39m       Copy a .sql file, (1st paramater), into a the target db (2nd parameter)\n"
     printf "    \e[33mreset\e[39m                           Reset the mys_helper config file and prompt for new details\n"
+    exit 0
 }
 
 main "$@"; exit
