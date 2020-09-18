@@ -1,4 +1,4 @@
-# mys-helper
+# mys
 
 A tiny cli tool to rapidly create, import and drop local MySQL databases.
 
