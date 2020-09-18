@@ -6,7 +6,7 @@ A tiny cli tool to rapidly create, import and drop local MySQL databases.
 Copy and paste the following into your terminal:
 
 ```sh
-git clone https://github.com/steadfast-collective/mys.git ~/mys && cd ~/mys && ./mys --setup | bash
+git clone https://github.com/steadfast-collective/mys.git ~/mys && cd ~/mys && ./mys --setup
 ```
 
 ## Usage
