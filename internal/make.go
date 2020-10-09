@@ -21,4 +21,5 @@ func MakeDatabase(db_name string, name string, password string) {
 			fmt.Printf("Successfully created database '%s'\n", db_name)
 		}
 	}
+	db.Close()
 }

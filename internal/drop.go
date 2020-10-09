@@ -21,4 +21,5 @@ func DropDatabase(db_name string, name string, password string) {
 			fmt.Printf("Successfully dropped database '%s'\n", db_name)
 		}
 	}
+	db.Close()
 }

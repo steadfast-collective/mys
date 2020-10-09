@@ -1,18 +1,16 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"mys/internal"
 	"os"
-
-	"github.com/manifoldco/promptui"
 
 	flag "github.com/spf13/pflag"
 	v "github.com/spf13/viper"
 )
 
 var (
+	configCMD        *flag.FlagSet
 	makeCMD          *flag.FlagSet
 	dropCMD          *flag.FlagSet
 	importCMD        *flag.FlagSet
@@ -33,23 +31,8 @@ func init() {
 		fmt.Println(err.Error())
 		os.Exit(1)
 	}
-	validateUsername := func(input string) error {
-		if len(input) == 0 {
-			return errors.New("Invalid MySQL username")
-		}
-		return nil
-	}
-	config_prompt := promptui.Prompt{
-		Label:    "Local MySQL username",
-		Validate: validateUsername,
-	}
 
-	result, err := config_prompt.Run()
-
-	if err != nil {
-		fmt.Printf("Prompt failed %v\n", err)
-	}
-	fmt.Printf("You chose %q\n", result)
+	configCMD = flag.NewFlagSet("config", flag.ExitOnError)
 
 	makeCMD = flag.NewFlagSet("make", flag.ExitOnError)
 	makeCMD.StringVarP(&db_name, "database", "d", "", "The name of the database to create / drop / import to depending on the command")
@@ -76,6 +59,8 @@ func parseCommand() {
 	pass := v.GetString("password")
 
 	switch os.Args[1] {
+	case "config":
+		writeConfig()
 	case "make":
 		makeCMD.Parse(os.Args[2:])
 		internal.MakeDatabase(db_name, name, pass)

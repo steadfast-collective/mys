@@ -1,8 +1,10 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 
+	"github.com/manifoldco/promptui"
 	v "github.com/spf13/viper"
 )
 
@@ -24,4 +26,24 @@ func scaffoldConfig() error {
 		fmt.Println("Config created at $HOME/.mysconfig.toml")
 	}
 	return nil
+}
+
+func writeConfig() {
+	validateUsername := func(input string) error {
+		if len(input) == 0 {
+			return errors.New("Invalid MySQL username")
+		}
+		return nil
+	}
+	config_prompt := promptui.Prompt{
+		Label:    "Local MySQL username",
+		Validate: validateUsername,
+	}
+
+	result, err := config_prompt.Run()
+
+	if err != nil {
+		fmt.Printf("Prompt failed %v\n", err)
+	}
+	v.Set("name", result)
 }
