@@ -29,6 +29,12 @@ func ScaffoldConfig() error {
 }
 
 func WriteConfig() {
+	setUsername()
+	setPassword()
+	v.WriteConfig()
+}
+
+func setUsername() {
 	validateUsername := func(input string) error {
 		if len(input) == 0 {
 			return errors.New("Invalid MySQL username")
@@ -54,5 +60,18 @@ func WriteConfig() {
 		fmt.Printf("Prompt failed %v\n", err)
 	}
 	v.Set("name", result)
-	v.WriteConfig()
+}
+
+func setPassword() {
+	config_prompt := promptui.Prompt{
+		Label: "Local MySQL password",
+		Mask:  '*',
+	}
+
+	result, err := config_prompt.Run()
+
+	if err != nil {
+		fmt.Printf("Prompt failed %v\n", err)
+	}
+	v.Set("password", result)
 }
