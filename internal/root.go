@@ -15,6 +15,7 @@ var (
 	dropCMD          *flag.FlagSet
 	importCMD        *flag.FlagSet
 	dumpCMD          *flag.FlagSet
+	is_remote        bool
 	db_name          string
 	file_name        string
 	destination_name string
@@ -24,9 +25,11 @@ func init() {
 	configCMD = flag.NewFlagSet("config", flag.ExitOnError)
 
 	makeCMD = flag.NewFlagSet("make", flag.ExitOnError)
+	makeCMD.BoolVarP(&is_remote, "remote", "r", false, "Should mys connect to the remote mysql")
 	makeCMD.StringVarP(&db_name, "database", "d", "", "The name of the database to create / drop / import to depending on the command")
 
 	dropCMD = flag.NewFlagSet("drop", flag.ExitOnError)
+	dropCMD.BoolVarP(&is_remote, "remote", "r", false, "Should mys connect to the remote mysql")
 	dropCMD.StringVarP(&db_name, "database", "d", "", "The name of the database to drop")
 
 	importCMD = flag.NewFlagSet("import", flag.ExitOnError)
@@ -47,7 +50,7 @@ func RunCmd(command string) error {
 		WriteConfig()
 	case "make":
 		makeCMD.Parse(os.Args[2:])
-		MakeDatabase(db_name, name, pass)
+		MakeDatabase(is_remote, db_name)
 	case "drop":
 		dropCMD.Parse(os.Args[2:])
 		DropDatabase(db_name, name, pass)
