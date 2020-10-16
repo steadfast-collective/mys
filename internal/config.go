@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"errors"
@@ -8,7 +8,7 @@ import (
 	v "github.com/spf13/viper"
 )
 
-func scaffoldConfig() error {
+func ScaffoldConfig() error {
 	v.SetConfigName(".mysconfig")
 	v.SetConfigType("toml")
 	v.AddConfigPath("$HOME")
@@ -18,7 +18,7 @@ func scaffoldConfig() error {
 
 	err := v.ReadInConfig()
 	if err != nil {
-		fmt.Printf("%s\n Lets create one now!\n", err)
+		fmt.Printf("%s\nLets create one now!\n", err)
 		err := v.SafeWriteConfig()
 		if err != nil {
 			return err
@@ -28,7 +28,7 @@ func scaffoldConfig() error {
 	return nil
 }
 
-func writeConfig() {
+func WriteConfig() {
 	validateUsername := func(input string) error {
 		if len(input) == 0 {
 			return errors.New("Invalid MySQL username")

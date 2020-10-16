@@ -25,7 +25,7 @@ func main() {
 }
 
 func init() {
-	err := scaffoldConfig()
+	err := internal.ScaffoldConfig()
 
 	if err != nil {
 		fmt.Println(err.Error())
@@ -60,7 +60,7 @@ func parseCommand() {
 
 	switch os.Args[1] {
 	case "config":
-		writeConfig()
+		internal.WriteConfig()
 	case "make":
 		makeCMD.Parse(os.Args[2:])
 		internal.MakeDatabase(db_name, name, pass)
