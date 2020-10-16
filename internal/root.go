@@ -39,8 +39,8 @@ func init() {
 }
 
 func RunCmd(command string) error {
-	name := v.GetString("name")
-	pass := v.GetString("password")
+	name := v.GetString("local.user")
+	pass := v.GetString("local.password")
 
 	switch command {
 	case "config":

@@ -13,8 +13,11 @@ func ScaffoldConfig() error {
 	v.SetConfigType("yaml")
 	v.AddConfigPath("$HOME")
 
-	v.SetDefault("local_name", "root")
-	v.SetDefault("local_password", "")
+	v.SetDefault("local.user", "root")
+	v.SetDefault("local.password", "")
+	v.SetDefault("remote.host", "")
+	v.SetDefault("remote.user", "")
+	v.SetDefault("remote.password", "")
 
 	err := v.ReadInConfig()
 	if err != nil {
@@ -59,7 +62,7 @@ func setUsername() {
 	if err != nil {
 		fmt.Printf("Prompt failed %v\n", err)
 	}
-	v.Set("local_name", result)
+	v.Set("local.user", result)
 }
 
 func setPassword() {
@@ -73,5 +76,5 @@ func setPassword() {
 	if err != nil {
 		fmt.Printf("Prompt failed %v\n", err)
 	}
-	v.Set("local_password", result)
+	v.Set("local.password", result)
 }
