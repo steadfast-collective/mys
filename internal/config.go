@@ -10,7 +10,7 @@ import (
 
 func ScaffoldConfig() error {
 	v.SetConfigName(".mysconfig")
-	v.SetConfigType("toml")
+	v.SetConfigType("yaml")
 	v.AddConfigPath("$HOME")
 
 	v.SetDefault("name", "root")
@@ -23,7 +23,7 @@ func ScaffoldConfig() error {
 		if err != nil {
 			return err
 		}
-		fmt.Println("Config created at $HOME/.mysconfig.toml")
+		fmt.Println("Config created at $HOME/.mysconfig.yaml")
 	}
 	return nil
 }
@@ -54,4 +54,5 @@ func WriteConfig() {
 		fmt.Printf("Prompt failed %v\n", err)
 	}
 	v.Set("name", result)
+	v.WriteConfig()
 }
