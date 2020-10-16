@@ -35,9 +35,17 @@ func WriteConfig() {
 		}
 		return nil
 	}
+	template := &promptui.PromptTemplates{
+		Prompt:  "{{ . }}",
+		Valid:   "{{ . | green }}",
+		Invalid: "{{ . | red }}",
+		Success: "{{ . | bold }}",
+	}
+
 	config_prompt := promptui.Prompt{
-		Label:    "Local MySQL username",
-		Validate: validateUsername,
+		Label:     "Local MySQL username: ",
+		Templates: template,
+		Validate:  validateUsername,
 	}
 
 	result, err := config_prompt.Run()
