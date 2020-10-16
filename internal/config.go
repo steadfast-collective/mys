@@ -34,6 +34,16 @@ func ScaffoldConfig() error {
 func WriteConfig() {
 	setUsername()
 	setPassword()
+	prompt := promptui.Prompt{
+		Label:     "Configure remote connection?",
+		IsConfirm: true,
+	}
+	result, err := prompt.Run()
+	if err != nil {
+		fmt.Printf("Prompt failed %v\n", err)
+		return
+	}
+	fmt.Printf("you chose %q\n", result)
 	v.WriteConfig()
 }
 
@@ -77,4 +87,8 @@ func setPassword() {
 		fmt.Printf("Prompt failed %v\n", err)
 	}
 	v.Set("local.password", result)
+}
+
+func setRemote() {
+	fmt.Println("here goes the remote logic")
 }
