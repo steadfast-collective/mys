@@ -15,6 +15,7 @@ var (
 	dropCMD          *flag.FlagSet
 	importCMD        *flag.FlagSet
 	dumpCMD          *flag.FlagSet
+	testCMD          *flag.FlagSet
 	is_remote        bool
 	db_name          string
 	file_name        string
@@ -22,6 +23,9 @@ var (
 )
 
 func init() {
+
+	testCMD = flag.NewFlagSet("test", flag.ExitOnError)
+
 	configCMD = flag.NewFlagSet("config", flag.ExitOnError)
 
 	makeCMD = flag.NewFlagSet("make", flag.ExitOnError)
@@ -46,6 +50,11 @@ func RunCmd(command string) error {
 	pass := v.GetString("local.password")
 
 	switch command {
+	case "test":
+		err := TestRemote()
+		if err != nil {
+			fmt.Println(err.Error())
+		}
 	case "config":
 		WriteConfig()
 	case "make":

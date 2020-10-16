@@ -3,6 +3,7 @@ package internal
 import (
 	"errors"
 	"fmt"
+	"os"
 
 	"github.com/manifoldco/promptui"
 	v "github.com/spf13/viper"
@@ -38,12 +39,14 @@ func WriteConfig() {
 		Label:     "Configure remote connection?",
 		IsConfirm: true,
 	}
-	result, err := prompt.Run()
+	_, err := prompt.Run()
 	if err != nil {
-		fmt.Printf("Prompt failed %v\n", err)
+		fmt.Println("Have fun!")
 		return
+	} else {
+		setRemote()
 	}
-	fmt.Printf("you chose %q\n", result)
+
 	v.WriteConfig()
 }
 
@@ -90,5 +93,58 @@ func setPassword() {
 }
 
 func setRemote() {
-	fmt.Println("here goes the remote logic")
+
+	host_prompt := promptui.Prompt{
+		Label: "Remote MySQL host",
+	}
+
+	host_result, host_err := host_prompt.Run()
+
+	if host_err != nil {
+		fmt.Printf("Prompt failed %v\n", host_err)
+		os.Exit(1)
+	} else {
+		v.Set("remote.host", host_result)
+	}
+
+	validateUsername := func(input string) error {
+		if len(input) == 0 {
+			return errors.New("Invalid MySQL username")
+		}
+		return nil
+	}
+	template := &promptui.PromptTemplates{
+		Prompt:  "{{ . }}",
+		Valid:   "{{ . | green }}",
+		Invalid: "{{ . | red }}",
+		Success: "{{ . | bold }}",
+	}
+
+	user_prompt := promptui.Prompt{
+		Label:     "Remote MySQL username: ",
+		Templates: template,
+		Validate:  validateUsername,
+	}
+
+	user_result, user_err := user_prompt.Run()
+
+	if user_err != nil {
+		fmt.Printf("Prompt failed %v\n", user_err)
+		os.Exit(1)
+	} else {
+		v.Set("remote.user", user_result)
+	}
+
+	pw_prompt := promptui.Prompt{
+		Label: "Remote MySQL password",
+		Mask:  '*',
+	}
+
+	pw_result, pw_err := pw_prompt.Run()
+
+	if pw_err != nil {
+		fmt.Printf("Prompt failed %v\n", pw_err)
+	} else {
+		v.Set("remote.password", pw_result)
+	}
 }
